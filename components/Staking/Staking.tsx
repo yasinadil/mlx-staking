@@ -180,6 +180,59 @@ function Staking() {
     }
   }
 
+  async function stakeBNB() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    const signer = provider.getSigner();
+
+    const bnbStakeContract = new ethers.Contract(
+      bnbStakingContractAddress,
+      bnbStakeABI,
+      signer
+    );
+
+    try {
+      // console.log(Number(ethers.utils.parseEther(bnbBalance)));
+      if (Number(ethers.utils.parseEther(bnbBalance)) < Number(bnbAmount)) {
+        toast.error("You do not have the funds for this transaction.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+      const response = await bnbStakeContract.deposit(refwallet, {
+        value: BigNumber.from(bnbAmount),
+      });
+      const wait = await provider.waitForTransaction(response.hash);
+      toast.success("Tokens Staked", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error: any) {
+      let message = error.reason;
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
+
   async function claimMLX() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     const signer = provider.getSigner();
@@ -519,7 +572,10 @@ function Staking() {
                         {Number(estBnb).toFixed(3)} MLT
                       </span>
                     </div>
-                    <button className="btn hover:bg-white hover:text-[#0A3975] bg-[#0A3975] mt-6">
+                    <button
+                      className="btn hover:bg-white hover:text-[#0A3975] bg-[#0A3975] mt-6"
+                      onClick={stakeBNB}
+                    >
                       Stake
                     </button>
 
