@@ -406,7 +406,12 @@ function Staking() {
           <div className="grid desktop:grid-cols-4 mobile:grid-cols-1 gap-5 desktop:pt-8 mobile:py-6 desktop:mx-48 mobile:mx-0 text-center">
             <div className="desktop:py-6 mobile:py-1 font-bold text-[#0A3975]">
               <h2 className="text-xl">Weekly ROI</h2>
-              <span>{isActivebnb ? bnbAPR : mlxAPR}%</span>
+              <span>
+                {isActivebnb
+                  ? Number(bnbAPR).toFixed(2)
+                  : Number(mlxAPR).toFixed(3)}
+                %
+              </span>
             </div>
             <div className="desktop:py-6 mobile:py-1 font-bold text-[#0A3975]">
               <h2 className="text-xl">Staking Rewards</h2>
@@ -511,7 +516,7 @@ function Staking() {
                       <span>Est. weekly earning: </span>
                       <span className="float-right">
                         {" "}
-                        {Number(estBnb).toFixed(2)} MLT
+                        {Number(estBnb).toFixed(3)} MLT
                       </span>
                     </div>
                     <button className="btn hover:bg-white hover:text-[#0A3975] bg-[#0A3975] mt-6">
@@ -562,7 +567,7 @@ function Staking() {
                       <span>Est. weekly earning: </span>
                       <span className="float-right">
                         {" "}
-                        {Number(estMlx).toFixed(2)} MLT
+                        {Number(estMlx).toFixed(3)} MLT
                       </span>
                     </div>
                     {approved ? (
