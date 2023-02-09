@@ -41,7 +41,7 @@ function Staking() {
   const [stakingRewardsFromBNB, setStakingRewardsFromBNB] = useState("0");
   const [reflink, setRefLink] = useState("");
   const { address, isConnected } = useAccount();
-  const providerUrl = `https://skilled-still-market.bsc-testnet.discover.quiknode.pro/${process.env.qnAPI}/`;
+  const providerUrl = process.env.qnAPI;
   var router = useRouter();
 
   useEffect(() => {
@@ -309,6 +309,82 @@ function Staking() {
     }
   }
 
+  async function withdrawBNB() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    const signer = provider.getSigner();
+
+    const bnbStakeContract = new ethers.Contract(
+      bnbStakingContractAddress,
+      bnbStakeABI,
+      signer
+    );
+
+    try {
+      const response = await bnbStakeContract.withdrawCapital();
+      const wait = await provider.waitForTransaction(response.hash);
+      toast.success("Withdrew Capital", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error: any) {
+      let message = error.reason;
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
+
+  async function withdrawMLX() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    const signer = provider.getSigner();
+
+    const mlxStakeContract = new ethers.Contract(
+      mlxStakingContractAddress,
+      mlxStakeABI,
+      signer
+    );
+
+    try {
+      const response = await mlxStakeContract.withdrawCapital();
+      const wait = await provider.waitForTransaction(response.hash);
+      toast.success("Withdrew Capital", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error: any) {
+      let message = error.reason;
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
+
   async function loadMlxStakeInfo() {
     const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 
@@ -393,12 +469,13 @@ function Staking() {
   }
 
   async function loadMlxBalance() {
-    const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    const signer = provider.getSigner();
 
     const mlxContract = new ethers.Contract(
       mlxTokenAddress,
       mlxTokenABI,
-      provider
+      signer
     );
 
     const balance = await mlxContract.balanceOf(address);
@@ -409,7 +486,8 @@ function Staking() {
   }
 
   async function loadBNBBalance() {
-    const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    const signer = provider.getSigner();
     if (address != undefined) {
       provider.getBalance(address).then((balance) => {
         const balanceInEth = ethers.utils.formatEther(balance);
@@ -487,7 +565,7 @@ function Staking() {
               </p>
             </div>
             <div className="desktop:py-6 mobile:py-1 font-bold text-[#0A3975]">
-              <h2 className="text-xl">Referral Amount</h2>
+              <h2 className="text-xl">Referral Count</h2>
               <span>
                 {isActivebnb ? (
                   <>{bnbRefAmount} BNB</>
@@ -585,6 +663,12 @@ function Staking() {
                     >
                       Claim Rewards
                     </button>
+                    <button
+                      className="btn hover:bg-white hover:text-[#0A3975] bg-[#0A3975] mt-3"
+                      onClick={withdrawBNB}
+                    >
+                      Withdraw Capital
+                    </button>
                   </>
                 )}
                 {isActivemlx && (
@@ -646,6 +730,12 @@ function Staking() {
                       onClick={claimMLX}
                     >
                       Claim Rewards
+                    </button>
+                    <button
+                      className="btn hover:bg-white hover:text-[#0A3975] bg-[#0A3975] mt-3"
+                      onClick={withdrawMLX}
+                    >
+                      Withdraw Capital
                     </button>
                   </>
                 )}

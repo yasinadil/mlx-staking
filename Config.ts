@@ -1,3 +1,3 @@
-export const mlxStakingContractAddress = "0x811b7456aC6ab46F31E0113Af2fF1ff0348701e4"
-export const bnbStakingContractAddress = "0x2714A3E17dc1145384EE134C902F3c111dF17ccc"
-export const mlxTokenAddress = "0xC23D22BeecD8Af4E816e973afEA7D4c9dA1C3226";
+export const mlxStakingContractAddress = "0x174d148C0C1Dfcc6B6A63BFa00d3AC50eEc8ab7C"
+export const bnbStakingContractAddress = "0xA2Cdac065C0C3c4A7DB571e4AaF1E31C30e3394e"
+export const mlxTokenAddress = "0x7Ad0972c488B6372c6657776e6B6Ce594372CFEF";

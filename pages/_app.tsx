@@ -7,20 +7,24 @@ import {
   Theme,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { bscTestnet } from "wagmi/chains";
+import { bsc } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
-//skilled-still-market.bsc-testnet.discover.quiknode.pro/43a1c3c2c004d25408dbdb7e8553325b67ab7188/
+let providerLink: string;
+if (process.env.qnAPI != undefined) {
+  providerLink = process.env.qnAPI;
+}
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [bscTestnet],
+  [bsc],
   [
     jsonRpcProvider({
       rpc: (chain) => ({
-        http: `https://skilled-still-market.bsc-testnet.discover.quiknode.pro/${process.env.qnAPI}/`,
-        webSocket: `wss://skilled-still-market.bsc-testnet.discover.quiknode.pro/${process.env.qnAPI}/`,
+        http: providerLink,
+        // http: `https://white-fabled-glade.bsc.discover.quiknode.pro/${process.env.qnAPI}/`,
+        // webSocket: `wss://white-fabled-glade.bsc.discover.quiknode.pro/${process.env.qnWssAPI}/`,
       }),
     }),
   ]
