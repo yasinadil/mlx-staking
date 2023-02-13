@@ -51,31 +51,33 @@ function Staking() {
     async function getChainId() {
       const provider = new ethers.providers.JsonRpcProvider(providerUrl);
       const { chainId } = await provider.getNetwork();
-
-      if (isConnected && chainId == chain.id) {
-        loadMlxBalance();
-        loadBNBBalance();
-        loadMlxRefRewards();
-        loadBnbRefRewards();
-        const url =
-          window.location.protocol +
-          "//" +
-          window.location.host +
-          "?ref=" +
-          address;
-        console.log(url);
-        setRefLink(url);
-      } else {
-        const url =
-          window.location.protocol +
-          "//" +
-          window.location.host +
-          "?ref=" +
-          "0x0000000000000000000000000000000000000000";
-        console.log("No referral");
-        setRefLink(url);
+      if (chain != undefined) {
+        if (isConnected && chainId == chain.id) {
+          loadMlxBalance();
+          loadBNBBalance();
+          loadMlxRefRewards();
+          loadBnbRefRewards();
+          const url =
+            window.location.protocol +
+            "//" +
+            window.location.host +
+            "?ref=" +
+            address;
+          console.log(url);
+          setRefLink(url);
+        } else {
+          const url =
+            window.location.protocol +
+            "//" +
+            window.location.host +
+            "?ref=" +
+            "0x0000000000000000000000000000000000000000";
+          console.log("No referral");
+          setRefLink(url);
+        }
       }
     }
+
     getChainId();
     const queryParams = new URLSearchParams(window.location.search);
     const ref = queryParams.get("ref");
