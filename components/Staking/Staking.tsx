@@ -12,6 +12,7 @@ import {
 } from "../../Config";
 import BNB from "../../assets/bnb.png";
 import MLX from "../../assets/mlx.png";
+import { useNetwork } from "wagmi";
 
 const bnbStakeABI = require("../../components/ABI/bnbStakeABI.json");
 const mlxStakeABI = require("../../components/ABI/mlxStakeABI.json");
@@ -41,34 +42,41 @@ function Staking() {
   const [stakingRewardsFromBNB, setStakingRewardsFromBNB] = useState("0");
   const [reflink, setRefLink] = useState("");
   const { address, isConnected } = useAccount();
+  const { chain, chains } = useNetwork();
   const providerUrl = process.env.qnAPI;
 
   var router = useRouter();
 
   useEffect(() => {
-    if (isConnected) {
-      loadMlxBalance();
-      loadBNBBalance();
-      loadMlxRefRewards();
-      loadBnbRefRewards();
-      const url =
-        window.location.protocol +
-        "//" +
-        window.location.host +
-        "?ref=" +
-        address;
-      console.log(url);
-      setRefLink(url);
-    } else {
-      const url =
-        window.location.protocol +
-        "//" +
-        window.location.host +
-        "?ref=" +
-        "0x0000000000000000000000000000000000000000";
-      console.log(url);
-      setRefLink(url);
+    async function getChainId() {
+      const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+      const { chainId } = await provider.getNetwork();
+
+      if (isConnected && chainId == chain.id) {
+        loadMlxBalance();
+        loadBNBBalance();
+        loadMlxRefRewards();
+        loadBnbRefRewards();
+        const url =
+          window.location.protocol +
+          "//" +
+          window.location.host +
+          "?ref=" +
+          address;
+        console.log(url);
+        setRefLink(url);
+      } else {
+        const url =
+          window.location.protocol +
+          "//" +
+          window.location.host +
+          "?ref=" +
+          "0x0000000000000000000000000000000000000000";
+        console.log("No referral");
+        setRefLink(url);
+      }
     }
+    getChainId();
     const queryParams = new URLSearchParams(window.location.search);
     const ref = queryParams.get("ref");
     console.log(ref);
@@ -80,7 +88,7 @@ function Staking() {
       setRefWallet(ref);
       console.log(ref);
     }
-  }, [isConnected]);
+  }, [isConnected, chain]);
 
   const toggleClassBNB = () => {
     setActiveBNB(!isActivebnb);
@@ -457,11 +465,8 @@ function Staking() {
     );
 
     const refInfo = await bnbStakeContract.referralRewards(address);
-    setBnbRefAmount(
-      Number(ethers.utils.formatEther(BigNumber.from(refInfo.amount))).toFixed(
-        2
-      )
-    );
+    const refamount = refInfo.amount;
+    setBnbRefAmount(refamount.toString());
     setBnbRefReward(
       Number(ethers.utils.formatEther(BigNumber.from(refInfo.reward))).toFixed(
         2
@@ -485,11 +490,8 @@ function Staking() {
     );
 
     const refInfo = await mlxStakeContract.referralRewards(address);
-    setMlxRefAmount(
-      Number(ethers.utils.formatEther(BigNumber.from(refInfo.amount))).toFixed(
-        2
-      )
-    );
+    const refamount = refInfo.amount;
+    setMlxRefAmount(refamount.toString());
     setMlxRefReward(
       Number(ethers.utils.formatEther(BigNumber.from(refInfo.reward))).toFixed(
         2
@@ -603,11 +605,7 @@ function Staking() {
             <div className="desktop:py-6 mobile:py-1 font-bold text-[#0A3975]">
               <h2 className="text-xl">Referral Count</h2>
               <span>
-                {isActivebnb ? (
-                  <>{bnbRefAmount} BNB</>
-                ) : (
-                  <>{mlxRefAmount} MLX</>
-                )}
+                {isActivebnb ? <>{bnbRefAmount}</> : <>{mlxRefAmount}</>}
               </span>
             </div>
           </div>
