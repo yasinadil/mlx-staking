@@ -31,7 +31,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "Nox Platform",
+  appName: "MLX Staking",
   chains,
 });
 

@@ -42,6 +42,7 @@ function Staking() {
   const [reflink, setRefLink] = useState("");
   const { address, isConnected } = useAccount();
   const providerUrl = process.env.qnAPI;
+
   var router = useRouter();
 
   useEffect(() => {
@@ -99,6 +100,41 @@ function Staking() {
     loadMlxStakeInfo();
     loadBnbStakeInfo();
   }, []);
+
+  // async function getStakers() {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  //   const signer = provider.getSigner();
+
+  //   const mlxStakeContract = new ethers.Contract(
+  //     mlxStakingContractAddress,
+  //     mlxStakeABI,
+  //     signer
+  //   );
+  //   let stakers = [];
+  //   let balances = [];
+  //   let lastActionTime = [];
+  //   let swapLock = [];
+  //   let depositTime = [];
+  //   for (let i = 0; i < 11; i++) {
+  //     const response = await mlxStakeContract.stakerList(i);
+  //     stakers.push(response);
+  //     const bal = await mlxStakeContract.balances(response);
+  //     balances.push(bal.toString());
+  //     const lastTime = await mlxStakeContract.lastActionTime(response);
+  //     lastActionTime.push(lastTime.toString());
+  //     const swaplock = await mlxStakeContract.swaplock(response);
+  //     const timeswap = swaplock.time;
+  //     swapLock.push(swaplock.toString());
+  //     const depTime = await mlxStakeContract.depositTime(response);
+  //     depositTime.push(depTime.toString());
+  //   }
+
+  //   console.log(stakers);
+  //   console.log(balances);
+  //   console.log(lastActionTime);
+  //   console.log(swapLock);
+  //   console.log(depositTime);
+  // }
 
   async function approveMLX() {
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
