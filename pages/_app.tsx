@@ -13,8 +13,8 @@ import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 let providerLink: string;
-if (process.env.qnAPI != undefined) {
-  providerLink = process.env.qnAPI;
+if (process.env.NEXT_PUBLIC_QN_API != undefined) {
+  providerLink = process.env.NEXT_PUBLIC_QN_API;
 }
 
 const { chains, provider, webSocketProvider } = configureChains(
@@ -23,8 +23,6 @@ const { chains, provider, webSocketProvider } = configureChains(
     jsonRpcProvider({
       rpc: (chain) => ({
         http: providerLink,
-        // http: `https://white-fabled-glade.bsc.discover.quiknode.pro/${process.env.qnAPI}/`,
-        // webSocket: `wss://white-fabled-glade.bsc.discover.quiknode.pro/${process.env.qnWssAPI}/`,
       }),
     }),
   ]
