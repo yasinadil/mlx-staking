@@ -43,7 +43,7 @@ function Staking() {
   const [reflink, setRefLink] = useState("");
   const { address, isConnected } = useAccount();
   const { chain, chains } = useNetwork();
-  const providerUrl = process.env.qnAPI;
+  const providerUrl = process.env.NEXT_PUBLIC_QN_API;
 
   var router = useRouter();
 
