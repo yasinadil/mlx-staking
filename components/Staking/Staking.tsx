@@ -77,7 +77,7 @@ function Staking() {
         }
       }
     }
-
+    // getStakers();
     getChainId();
     const queryParams = new URLSearchParams(window.location.search);
     const ref = queryParams.get("ref");
@@ -125,7 +125,7 @@ function Staking() {
   //   let lastActionTime = [];
   //   let swapLock = [];
   //   let depositTime = [];
-  //   for (let i = 0; i < 11; i++) {
+  //   for (let i = 88; i < 93; i++) {
   //     const response = await mlxStakeContract.stakerList(i);
   //     stakers.push(response);
   //     const bal = await mlxStakeContract.balances(response);
